@@ -1,0 +1,32 @@
+.home {
+    width: 350px;
+    margin: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include max-screen($phone-max-width) {
+        width: 250px;
+    }
+}
+
+.home__logo {
+    height: 300px;
+
+    @include max-screen($phone-max-width) {
+        height: 200px;
+    }
+}
+
+.home_title {
+    text-align: center;
+}
+
+.home__form {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
