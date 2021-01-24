@@ -3,5 +3,15 @@
 
     "login": "Login",
     "register": "Register",
-    "forgot_password": "Forgot Password"
+    "forgot_password": "Forgot Password",
+
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "new_password": "New Password",
+    "confirm_new_password": "Confirm New Password",
+    "reset_password": "Reset Password",
+
+    "submit": "Submit",
+    "cancel": "Cancel"
 }

@@ -1,9 +1,11 @@
 <template>
     <fragment>
-        <div v-if="showForm">
-            <a href="#" @click.prevent="toggleForm">close</a>
-        </div>
-        <a v-else href="#" @click="toggleForm">{{ $t('forgot_password') }}</a>
+        <form v-if="showForm" class="form">
+            <input type="email" class="form__input" :placeholder="$t('email')" required>
+            <button class="btn btn--green-gradient">{{ $t('submit') }}</button>
+            <a href="#" @click.prevent="toggleForm">{{ $t('cancel') }}</a>
+        </form>
+        <a v-else href="#" @click.prevent="toggleForm">{{ $t('forgot_password') }}?</a>
     </fragment>
 </template>
 

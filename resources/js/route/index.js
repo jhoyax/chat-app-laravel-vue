@@ -2,6 +2,10 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import Home from '@/views/Home';
+import Chats from '@/views/Chats';
+import Profile from '@/views/Profile';
+import NotFound from '@/views/NotFound';
+import ResetPassword from '@/views/ResetPassword';
 
 Vue.use(VueRouter);
 
@@ -12,7 +16,29 @@ let router = new VueRouter({
           path: '/',
           name: 'home',
           component: Home,
-        }
+        },
+        {
+          path: '/reset-password',
+          name: 'reset-password',
+          component: ResetPassword,
+        },
+        {
+          path: '/chats',
+          name: 'chats',
+          component: Chats,
+          meta: { requiredAuth: true }
+        },
+        {
+          path: '/profile',
+          name: 'profile',
+          component: Profile,
+          meta: { requiredAuth: true }
+        },
+        {
+            path: '*',
+            name: 'notFound',
+            component: NotFound,
+        },
     ]
 });
 
