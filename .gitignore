@@ -3,6 +3,7 @@
 /public/storage
 /public/js
 /public/css
+/public/img
 /storage/*.key
 /vendor
 .env
@@ -12,4 +13,4 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-.DS_Store
+*.DS_Store

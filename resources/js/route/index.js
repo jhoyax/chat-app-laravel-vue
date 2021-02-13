@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import Home from '@/views/Home';
+import Chat from '@/views/Chat';
 import Chats from '@/views/Chats';
 import Profile from '@/views/Profile';
 import NotFound from '@/views/NotFound';
@@ -29,7 +30,13 @@ let router = new VueRouter({
           meta: { requiredAuth: true }
         },
         {
-          path: '/profile',
+          path: '/chats/:chatId',
+          name: 'chat',
+          component: Chat,
+          meta: { requiredAuth: true }
+        },
+        {
+          path: '/profile/:profileId',
           name: 'profile',
           component: Profile,
           meta: { requiredAuth: true }

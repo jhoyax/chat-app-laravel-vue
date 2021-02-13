@@ -3,9 +3,14 @@
 @import 'variables';
 @import 'media-queries';
 
+@import 'mixin';
 @import 'common';
 @import 'transitions';
 
-@import 'components/home';
+@import 'components/menu';
 @import 'components/form';
+@import 'components/home';
+@import 'components/chat';
+@import 'components/chats';
+@import 'components/profile';
 @import 'components/notfound';

@@ -1,20 +1,7 @@
 .notfound {
-    width: 350px;
-    margin: auto;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    @include max-screen($phone-max-width) {
-        width: 250px;
-    }
+    @include container-size;
 }
 
 .notfound__logo {
-    height: 300px;
-
-    @include max-screen($phone-max-width) {
-        height: 200px;
-    }
+    @include logo-size;
 }

@@ -1,27 +1,39 @@
 <template>
-    <div>
-    <h1>Chats</h1>
-    <a href="#" @click.prevent="handleLogout">{{$t('logout')}}</a>
+    <div class="chats">
+        <h1>Chats</h1>
+        <form action="" class="search">
+            <input type="text" class="search__input">
+            <button class="search__submit">Search</button>
+        </form>
+
+        <ul>
+            <li>
+                <router-link :to="{ name: 'chat', params: {chatId: 1} }">User 1</router-link>
+            </li>
+            <li>
+                <router-link :to="{ name: 'chat', params: {chatId: 1} }">User 1</router-link>
+            </li>
+            <li>
+                <router-link :to="{ name: 'chat', params: {chatId: 1} }">User 1</router-link>
+            </li>
+            <li>
+                <router-link :to="{ name: 'chat', params: {chatId: 1} }">User 1</router-link>
+            </li>
+            <li>
+                <router-link :to="{ name: 'chat', params: {chatId: 1} }">User 1</router-link>
+            </li>
+        </ul>
+        <Menu/>
     </div>
 </template>
 
 <script>
-import { default as store } from '@/store';
-import { LOGOUT } from '@/store/action-types';
+import Menu from '@/components/Menu';
 
 export default {
-    name: "Chats",
-    methods: {
-        handleLogout() {
-            let params = {
-                successCb: res => {
-                    // redirect to home
-                    this.$router.push({name: 'home'});
-                },
-                errorCb: error => {}
-            }
-            store.dispatch(LOGOUT, params);
-        }
+    name: 'Chats',
+    components: {
+        Menu,
     }
 }
 </script>

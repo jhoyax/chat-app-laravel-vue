@@ -1,22 +1,9 @@
 .home {
-    width: 350px;
-    margin: auto;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    @include max-screen($phone-max-width) {
-        width: 250px;
-    }
+    @include container-size;
 }
 
 .home__logo {
-    height: 300px;
-
-    @include max-screen($phone-max-width) {
-        height: 200px;
-    }
+    @include logo-size;
 }
 
 .home__title {
