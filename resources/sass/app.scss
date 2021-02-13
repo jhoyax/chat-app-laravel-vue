@@ -1,9 +1,10 @@
 @import 'reset';
 @import 'fonts';
-@import 'settings';
+@import 'variables';
 @import 'media-queries';
 
 @import 'common';
+@import 'transitions';
 
 @import 'components/home';
 @import 'components/form';

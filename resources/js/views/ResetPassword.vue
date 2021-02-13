@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <img class="home__logo" src="/img/messenger.svg">
-        <h1 class="home_title">{{ $t('reset_password') }}</h1>
+        <h1 class="home__title">{{ $t('reset_password') }}</h1>
         <ResetPasswordForm/>
     </div>
 </template>

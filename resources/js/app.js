@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import App from '@/App.vue';
-import i18n from '@/services/i18n';
-import http from "@/services/http";
+import i18n from '@/utils/i18n';
+import http from "@/utils/http";
 import VueCookies from 'vue-cookies';
 
-import './bootstrap';
-import router from '@/route/';
+import '@/bootstrap';
 import store from '@/store/';
+import router from '@/route/';
 
 Vue.use(VueCookies)
 

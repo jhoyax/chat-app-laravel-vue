@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <img class="home__logo" src="/img/messenger.svg">
-        <h1 class="home_title">{{ $t(title) }}</h1>
+        <h1 class="home__title">{{ $t(title) }}</h1>
         <div class="home__form">
             <LoginForm v-if="showForm.login" @close="toggleForm"/>
         </div>
@@ -52,6 +52,10 @@ export default {
                 }
             }
         }
+    },
+    beforeRouteEnter(to, from, next) {
+        if ($cookies.isKey('token')) next({name: 'chats'});
+        else next();
     }
 }
 </script>

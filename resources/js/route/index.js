@@ -18,7 +18,7 @@ let router = new VueRouter({
           component: Home,
         },
         {
-          path: '/reset-password',
+          path: '/reset-password/:token/:email',
           name: 'reset-password',
           component: ResetPassword,
         },
