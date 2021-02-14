@@ -1,19 +1,19 @@
 <template>
     <div class="menu">
         <ul class="menu__links">
-            <li>
-                <router-link :to="{ name: 'chats' }">
-                    <img src="/img/messenger-light-gray.svg">
-                    Chats
+            <li
+                v-for="(item, index) in links"
+                :key="index"
+                :class="{
+                    'menu__links-item' : true,
+                    'menu__links-item--active' : currentRouteName == item.routeName,
+                }">
+                <router-link :to="{ name: item.routeName, params: item.routeParams }">
+                    <img :src="currentRouteName == item.routeName ? item.imgActive : item.img">
+                    {{item.name}}
                 </router-link>
             </li>
-            <li>
-                <router-link :to="{ name: 'profile', params: {profileId: 1} }">
-                    <img src="/img/logout-light-gray.svg">
-                    Profile
-                </router-link>
-            </li>
-            <li>
+            <li class="menu__links-item">
                 <a href="#" @click.prevent="handleLogout">
                     <img src="/img/logout-light-gray.svg">
                     {{$t('logout')}}
@@ -28,6 +28,31 @@ import { LOGOUT } from '@/store/action-types';
 
 export default {
     name: 'Menu',
+    data() {
+        return {
+            links: [
+                {
+                    name: 'Chats',
+                    img: '/img/message-light-gray.svg',
+                    imgActive: '/img/message.svg',
+                    routeName: 'chats',
+                    routeParams: {},
+                },
+                {
+                    name: 'Profile',
+                    img: '/img/user-light-gray.svg',
+                    imgActive: '/img/user.svg',
+                    routeName: 'profile',
+                    routeParams: {profileId: 1},
+                },
+            ]
+        }
+    },
+    computed: {
+        currentRouteName() {
+            return this.$route.name;
+        },
+    },
     methods: {
         handleLogout() {
             let params = {

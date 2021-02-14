@@ -7,6 +7,8 @@
 
     padding: 25px;
 
+    background-color: $color-white;
+
     @include max-screen($phone-max-width) {
         width: 100vw;
     }
@@ -15,9 +17,11 @@
 .menu__links {
     display: flex;
     justify-content: space-between;
+}
 
+.menu__links-item {
     img {
-        height: 32px;
+        height: 24px;
 
         margin-bottom: 5px;
     }
@@ -30,5 +34,11 @@
         font-size: 0.75em;
         text-decoration: none;
         color: $color-light-gray;
+    }
+}
+
+.menu__links-item--active {
+    a {
+        color: $color-black;
     }
 }
