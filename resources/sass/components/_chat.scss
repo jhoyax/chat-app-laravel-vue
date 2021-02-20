@@ -13,6 +13,7 @@
     box-shadow: rgb(0 0 0 / 5%) 0 16px 20px -7px;
     padding: 20px 10px;
     background-color: $color-white;
+    justify-content: space-between;
 
     @include max-screen($phone-max-width) {
         width: 100vw;
@@ -33,15 +34,52 @@
     background-size: cover;
     background-position: center;
     background-image: url('/img/user-light-gray.svg');
-    margin-left: 15px;
+    margin-left: 10px;
+}
+
+.chat__header-left {
+    display: flex;
+    align-items: center;
+
+    a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
 }
 
 .chat__header-back {
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-right: 10px solid $color-light-gray;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-image: url('/img/left-arrow-light-gray.svg');
+}
+
+.chat__header-more {
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-image: url('/img/more-light-gray.svg');
+    cursor: pointer;
+}
+
+.chat__header-option {
+    position: absolute;
+    background-color: #fff;
+    right: 30px;
+    border: 1px solid #EDEDEF;
+    padding: 10px 0;
+    top: 30px;
+    box-shadow: rgb(0 0 0 / 5%) 0 15px 20px -5px;
+
+    a {
+        text-decoration: none;
+        padding: 10px 30px;
+
+        &:hover {
+            background-color: $color-dark-white;
+        }
+    }
 }
 
 .chat__message-img {

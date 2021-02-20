@@ -43,7 +43,7 @@ export default {
                     img: '/img/user-light-gray.svg',
                     imgActive: '/img/user.svg',
                     routeName: 'profile',
-                    routeParams: {profileId: 1},
+                    routeParams: { profileId: 1 },
                 },
             ]
         }
