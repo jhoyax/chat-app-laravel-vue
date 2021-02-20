@@ -3,3 +3,63 @@
 
     position: relative;
 }
+
+.chats__header {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 15px 20px;
+
+    @include max-screen($phone-max-width) {
+        width: 100vw;
+    }
+
+    h1 {
+        color: $color-black;
+        font-size: 1.25em;
+        margin-bottom: 0;
+    }
+}
+
+.chats__search {
+    width: 100%;
+
+    padding: 0 10px;
+
+    .form__input {
+        margin-bottom: 0;
+    }
+}
+
+.chats__list {
+    width: 100%;
+    padding: 0 20px 100px 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.chats__item {
+    display: flex;
+    text-decoration: none;
+    padding: 10px 0;
+    align-items: center;
+
+    label {
+        font-weight: bold;
+        margin-left: 15px;
+    }
+}
+
+.chats__item-img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-image: url('/img/user-light-gray.svg')
+}

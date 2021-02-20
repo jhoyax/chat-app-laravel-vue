@@ -15,5 +15,14 @@
     "reset_password": "Reset Password",
 
     "submit": "Submit",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "back": "Back",
+    "search": "Search",
+    "update": "Update",
+
+    "profile": "Profile",
+    "edit_profile": "Edit Profile",
+
+    "chats": "Chats",
+    "chat": "Chat"
 }
