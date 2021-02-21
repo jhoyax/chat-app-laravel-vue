@@ -34,7 +34,6 @@
     background-size: cover;
     background-position: center;
     background-image: url('/img/user-light-gray.svg');
-    margin-left: 10px;
 }
 
 .chat__header-left {
@@ -45,6 +44,10 @@
         display: flex;
         align-items: center;
         text-decoration: none;
+
+        &:nth-child(1) {
+            margin-right: 10px;
+        }
     }
 }
 

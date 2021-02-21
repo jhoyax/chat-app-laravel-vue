@@ -17,6 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::namespace('API')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::post('logout', 'AuthenticateUserController@logout');
+
+        Route::prefix('users')->group(function () {
+            Route::put('{user}', 'UserController@update');
+            Route::put('{user}/update-avatar', 'UserController@updateAvatar');
+        });
     });
 
     Route::post('login', 'AuthenticateUserController@login');
