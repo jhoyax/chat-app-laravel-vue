@@ -19,9 +19,15 @@ Route::namespace('API')->group(function () {
         Route::post('logout', 'AuthenticateUserController@logout');
 
         Route::prefix('users')->group(function () {
+            Route::get('/', 'UserController@index');
             Route::get('get-by-id', 'UserController@getById');
             Route::put('{user}', 'UserController@update');
             Route::put('{user}/update-avatar', 'UserController@updateAvatar');
+        });
+
+        Route::prefix('chats')->group(function () {
+            Route::get('/', 'ChatController@index');
+            Route::post('/', 'ChatController@store');
         });
     });
 

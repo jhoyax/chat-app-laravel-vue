@@ -18,35 +18,15 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function index(Request $request)
     {
-        //
-    }
+        $users = User::filterByName($request->input('name'))->get();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\User  $user
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        return new UserResource($user);
+        return UserResource::collection($users);
     }
 
     /**
@@ -69,18 +49,6 @@ class UserController extends Controller
         $user->save();
 
         return new UserResource($user);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     /**

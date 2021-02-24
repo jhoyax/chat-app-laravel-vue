@@ -36,4 +36,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Scope a query to filter by name
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param mixed $name
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFilterByName($query, $name)
+    {
+        if ($name) {
+            return $query->where('name', 'like', '%' . $name . '%');
+        }
+
+        return $query;
+    }
 }
