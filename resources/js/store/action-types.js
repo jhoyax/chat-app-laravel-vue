@@ -2,10 +2,14 @@
 export const LOGOUT = 'LOGOUT';
 
 // user.js
-export const USER_GET_BY_ID = 'USER_GET_BY_ID';
+export const GET_USER_BY_ID = 'GET_USER_BY_ID';
+export const UPDATE_USER = 'UPDATE_USER';
+export const UPDATE_USER_AVATAR = 'UPDATE_USER_AVATAR';
 
 export const ACTION = {
     LOGOUT,
 
-    USER_GET_BY_ID,
+    GET_USER_BY_ID,
+    UPDATE_USER,
+    UPDATE_USER_AVATAR,
 };

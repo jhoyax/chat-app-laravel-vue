@@ -4,7 +4,13 @@
             <h1>{{ $t('profile') }}</h1>
         </div>
         <div class="profile__picture">
-            <div class="profile__picture-img" style="background-image: url('/img/profile.jpg')"></div>
+            <div class="profile__picture-img" :style="getAvatarStyle">
+                <input
+                    v-if="user.isCurrentUser"
+                    type="file"
+                    @change="onFileChange"
+                    accept=".jpg, .jpeg, .png, .gif">
+            </div>
             <label for="">{{ user.name }}</label>
         </div>
         <div class="profile__details">
@@ -14,35 +20,65 @@
                         <td>{{ $t('name') }}</td>
                         <td v-if="!isEdit">{{ user.name }}</td>
                         <td v-if="isEdit">
-                            <input type="text" class="form__input" required maxlength="255">
+                            <input type="text" class="form__input" required maxlength="255" v-model="form.name">
+                            <template v-if="form.errors.errors.errors">
+                                <label
+                                    v-for="(item, index) in form.errors.errors.errors.name"
+                                    :key="`name-error-${index}`"
+                                    class="form__message form__message--error">{{item}}</label>
+                            </template>
                         </td>
                     </tr>
                     <tr>
                         <td>{{ $t('email') }}</td>
                         <td v-if="!isEdit">{{ user.email }}</td>
                         <td v-if="isEdit">
-                            <input type="text" class="form__input" required maxlength="255">
+                            <input type="text" class="form__input" required maxlength="255" v-model="form.email">
+                            <template v-if="form.errors.errors.errors">
+                                <label
+                                    v-for="(item, index) in form.errors.errors.errors.email"
+                                    :key="`name-error-${index}`"
+                                    class="form__message form__message--error">{{item}}</label>
+                            </template>
                         </td>
                     </tr>
                     <tr v-if="isEdit">
                         <td>{{ $t('new_password') }}</td>
                         <td>
-                            <input type="password" class="form__input" minlength="8">
+                            <input type="password" class="form__input" minlength="8" v-model="form.password">
+                            <template v-if="form.errors.errors.errors">
+                                <label
+                                    v-for="(item, index) in form.errors.errors.errors.password"
+                                    :key="`name-error-${index}`"
+                                    class="form__message form__message--error">{{item}}</label>
+                            </template>
                         </td>
                     </tr>
                     <tr v-if="isEdit">
                         <td>{{ $t('new_password_confirmation') }}</td>
                         <td>
-                            <input type="password" class="form__input" minlength="8">
+                            <input type="password" class="form__input" minlength="8" v-model="form.password_confirmation">
+                            <template v-if="form.errors.errors.errors">
+                                <label
+                                    v-for="(item, index) in form.errors.errors.errors.password_confirmation"
+                                    :key="`name-error-${index}`"
+                                    class="form__message form__message--error">{{item}}</label>
+                            </template>
                         </td>
                     </tr>
                 </table>
             </form>
         </div>
-        <div class="profile__actions">
+        <label
+            v-if="form.errors.errors.message"
+            class="form__message form__message--error">{{form.errors.errors.message}}</label>
+        <label
+            v-if="isSuccess"
+            class="form__message form__message--success">Success.</label>
+        <div class="profile__actions" v-if="user.isCurrentUser">
             <button
                 class="btn btn--green-gradient btn--small"
-                @click="isEdit = true"
+                @click="editProfile"
                     v-if="!isEdit">{{ $t('edit_profile') }}</button>
             <button
                 class="btn btn--light-gray btn--small"
@@ -58,10 +94,12 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 
+import Form from '@/utils/form';
 import Menu from '@/components/Menu';
-import { USER_GET_BY_ID } from '@/store/action-types';
+import { GET_USER_BY_ID, UPDATE_USER, UPDATE_USER_AVATAR } from '@/store/action-types';
+import { SET_CURRENT_USER } from '@/store/mutation-types';
 
 export default {
     name: 'Profile',
@@ -69,30 +107,109 @@ export default {
         return {
             isEdit: false,
             user: {},
+            profileId: this.$route.params.profileId,
+            form: new Form({
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: '',
+            }),
+            isSuccess: false,
         }
     },
     components: {
         Menu,
     },
     mounted() {
-        this.getUserById(this.$route.params.profileId);
+        if (Object.keys(this.currentUser).length && ! this.profileId) {
+            this.user = this.currentUser;
+        } else {
+            this.getUserById();
+        }
+    },
+    computed: {
+        ...mapGetters([
+            'currentUser'
+        ]),
+        getAvatarStyle() {
+            if (this.user.avatar) {
+                return `background-image: url(${this.user.avatar})`;
+            } else {
+                return '';
+            }
+        }
     },
     methods: {
         ...mapActions( [
-            USER_GET_BY_ID
+            GET_USER_BY_ID,
+            UPDATE_USER,
+            UPDATE_USER_AVATAR,
+        ]),
+        ...mapMutations( [
+            SET_CURRENT_USER,
         ]),
         updateProfile() {
-            this.isEdit = false;
-        },
-        getUserById(id) {
             let params = {
-                id: id,
+                id: this.user.id,
+                name: this.form.name,
+                email: this.form.email,
+                password: this.form.password,
+                password_confirmation: this.form.password_confirmation,
+                successCb: res => {
+                    this.form.errors.clear();
+                    this.isSuccess = true;
+
+                    this.user = res.data.data;
+                    if (this.user.isCurrentUser) {
+                        this.SET_CURRENT_USER({user: res.data.data});
+                    }
+
+                    setTimeout(() => {
+                        this.isSuccess = false;
+                    }, 1500);
+                },
+                errorCb: error => {
+                    this.form.onFail(error.response.data);
+                }
+            }
+            this.UPDATE_USER(params);
+        },
+        getUserById() {
+            let params = {
+                id: this.profileId,
                 successCb: res => {
                     this.user = res.data.data;
+
+                    if (this.user.isCurrentUser) {
+                        this.SET_CURRENT_USER({user: res.data.data});
+                    }
+                },
+                errorCb: error => {
+                    this.$router.push({name: 'chats'});
+                }
+            }
+            this.GET_USER_BY_ID(params);
+        },
+        editProfile() {
+            this.form.name = this.user.name;
+            this.form.email = this.user.email;
+
+            this.isEdit = true;
+        },
+        onFileChange(e) {
+            let files = e.target.files;
+            let params = {
+                id: this.user.id,
+                avatar: files[0],
+                successCb: res => {
+                    this.user = res.data.data;
+                    if (this.user.isCurrentUser) {
+                        this.SET_CURRENT_USER({user: res.data.data});
+                    }
                 },
                 errorCb: error => {}
             }
-            this.USER_GET_BY_ID(params);
+            this.UPDATE_USER_AVATAR(params);
         }
     }
 }

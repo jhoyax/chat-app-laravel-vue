@@ -48,8 +48,11 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 import Form from '@/utils/form';
 import homeForms from '@/mixins/homeForms';
+import { SET_CURRENT_USER } from '@/store/mutation-types';
 
 export default {
     name: 'LoginForm',
@@ -63,9 +66,13 @@ export default {
         }
     },
     methods: {
+        ...mapMutations( [
+            SET_CURRENT_USER
+        ]),
         submitForm(url) {
             this.form.post(url)
-                .then(response => {
+                .then(res => {
+                    this.SET_CURRENT_USER({user: res.user});
                     this.$router.push({name: 'chats'});
                 });
         }

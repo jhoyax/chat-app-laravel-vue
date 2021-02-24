@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             'avatar' => $this->avatar,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+            'isCurrentUser' => $request->user()->id == $this->id,
         ];
     }
 }

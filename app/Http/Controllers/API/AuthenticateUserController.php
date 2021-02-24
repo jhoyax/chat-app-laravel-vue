@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class AuthenticateUserController extends Controller
@@ -49,11 +51,14 @@ class AuthenticateUserController extends Controller
 
         $token = $this->tokenResult;
 
+        $user = User::where('email', $request->email)->first();
+
         return response()->json([
             'token' => $token->accessToken,
             'token_type' => 'bearer',
             'expires_at' => Carbon::parse($token->token->expires_at)->format('Y-m-d H:i:s'),
             'expires_at_seconds' => Carbon::parse($token->token->expires_at)->timestamp - Carbon::now()->timestamp,
+            'user' => new UserResource($user),
         ], Response::HTTP_OK);
     }
 

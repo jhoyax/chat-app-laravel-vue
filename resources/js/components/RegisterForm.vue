@@ -103,7 +103,7 @@ export default {
     methods: {
         submitForm(url) {
             this.form.post(url)
-                .then(response => {
+                .then(res => {
                     this.isSuccess = true;
 
                     setTimeout(() => {
