@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\API;
 
 use App\User;
+use App\Traits\HasUpload;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Http\Requests\RegisterUserRequest;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UpdateUserAvatarRequest;
 
 class UserController extends Controller
 {
+    use HasUpload;
+
     /**
      * Display a listing of the resource.
      *
@@ -36,13 +40,13 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\User  $user
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return new UserResource($user);
     }
 
     /**
@@ -53,9 +57,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(RegisterUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $user->update($request->all());
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+
+        $user->save();
 
         return new UserResource($user);
     }
@@ -82,8 +90,31 @@ class UserController extends Controller
      */
     public function updateAvatar(UpdateUserAvatarRequest $request, User $user)
     {
-        $user->avatar = $request->input('avatar');
+        $oldAvatar = $user->avatar;
+
+        $user->avatar = $this->storeFile($request->file('avatar'));
         $user->save();
+
+        $this->deleteFile($oldAvatar);
+
+        return new UserResource($user);
+    }
+
+    /**
+     * Get user by id
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getById(Request $request)
+    {
+        $user = $request->user();
+
+        $id = intval($request->input('id'));
+        if ($id) {
+            $user = User::find($id);
+        }
 
         return new UserResource($user);
     }

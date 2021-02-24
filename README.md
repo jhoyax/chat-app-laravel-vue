@@ -16,3 +16,15 @@ PASSPORT_CLIENT_SECRET=DdH27rrhA9avk5XS5JdfdaMWyFm3UIMqBNwRjcTj
 # Compile Vue
 
 1. npm run dev
+
+
+# Laradock
+
+```
+PHP_VERSION=7.3
+MYSQL_VERSION=latest
+```
+
+### Run Laradock
+
+> docker-compose up -d mysql nginx

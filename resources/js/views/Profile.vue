@@ -5,21 +5,21 @@
         </div>
         <div class="profile__picture">
             <div class="profile__picture-img" style="background-image: url('/img/profile.jpg')"></div>
-            <label for="">User 1</label>
+            <label for="">{{ user.name }}</label>
         </div>
         <div class="profile__details">
             <form>
                 <table>
                     <tr>
                         <td>{{ $t('name') }}</td>
-                        <td v-if="!isEdit">User 1</td>
+                        <td v-if="!isEdit">{{ user.name }}</td>
                         <td v-if="isEdit">
                             <input type="text" class="form__input" required maxlength="255">
                         </td>
                     </tr>
                     <tr>
                         <td>{{ $t('email') }}</td>
-                        <td v-if="!isEdit">user@gmail.com</td>
+                        <td v-if="!isEdit">{{ user.email }}</td>
                         <td v-if="isEdit">
                             <input type="text" class="form__input" required maxlength="255">
                         </td>
@@ -58,21 +58,41 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import Menu from '@/components/Menu';
+import { USER_GET_BY_ID } from '@/store/action-types';
 
 export default {
     name: 'Profile',
     data() {
         return {
             isEdit: false,
+            user: {},
         }
     },
     components: {
         Menu,
     },
+    mounted() {
+        this.getUserById(this.$route.params.profileId);
+    },
     methods: {
+        ...mapActions( [
+            USER_GET_BY_ID
+        ]),
         updateProfile() {
             this.isEdit = false;
+        },
+        getUserById(id) {
+            let params = {
+                id: id,
+                successCb: res => {
+                    this.user = res.data.data;
+                },
+                errorCb: error => {}
+            }
+            this.USER_GET_BY_ID(params);
         }
     }
 }

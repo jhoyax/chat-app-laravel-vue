@@ -8,7 +8,7 @@
                     'menu__links-item' : true,
                     'menu__links-item--active' : currentRouteName == item.routeName,
                 }">
-                <router-link :to="{ name: item.routeName, params: item.routeParams }">
+                <router-link :to="{ name: item.routeName }">
                     <img :src="currentRouteName == item.routeName ? item.imgActive : item.img">
                     {{item.name}}
                 </router-link>
@@ -23,7 +23,8 @@
     </div>
 </template>
 <script>
-import { default as store } from '@/store';
+import { mapActions } from "vuex";
+
 import { LOGOUT } from '@/store/action-types';
 
 export default {
@@ -36,14 +37,12 @@ export default {
                     img: '/img/message-light-gray.svg',
                     imgActive: '/img/message.svg',
                     routeName: 'chats',
-                    routeParams: {},
                 },
                 {
                     name: 'Profile',
                     img: '/img/user-light-gray.svg',
                     imgActive: '/img/user.svg',
                     routeName: 'profile',
-                    routeParams: { profileId: 1 },
                 },
             ]
         }
@@ -51,9 +50,12 @@ export default {
     computed: {
         currentRouteName() {
             return this.$route.name;
-        },
+        }
     },
     methods: {
+        ...mapActions( [
+            LOGOUT
+        ]),
         handleLogout() {
             let params = {
                 successCb: res => {
@@ -62,7 +64,7 @@ export default {
                 },
                 errorCb: error => {}
             }
-            store.dispatch(LOGOUT, params);
+            this.LOGOUT(params);
         }
     }
 }

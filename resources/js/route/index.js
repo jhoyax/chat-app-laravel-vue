@@ -36,8 +36,14 @@ let router = new VueRouter({
           meta: { requiredAuth: true }
         },
         {
-          path: '/profile/:profileId',
+          path: '/profile',
           name: 'profile',
+          component: Profile,
+          meta: { requiredAuth: true }
+        },
+        {
+          path: '/profile/:profileId',
+          name: 'profileById',
           component: Profile,
           meta: { requiredAuth: true }
         },
