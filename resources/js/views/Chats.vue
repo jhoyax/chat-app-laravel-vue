@@ -12,7 +12,7 @@
             <ul>
                 <template v-if="keyword">
                     <li>
-                        <template v-if="userList">
+                        <template v-if="userList.length">
                             <li v-for="(item, index) in userList" :key="index">
                                 <router-link :to="{ name: 'chat', params: {fromId: user.id, toId: item.id} }" class="chats__item">
                                     <div class="chats__item-img" :style="getAvatarStyle(item.avatar)"></div>
@@ -28,7 +28,7 @@
                     </li>
                 </template>
                 <template v-else>
-                    <template v-if="chatList">
+                    <template v-if="chatList.length">
                         <li v-for="(item, index) in chatList" :key="index">
                             <router-link
                                 :to="{ name: 'chat', params: {fromId: user.id, toId: user.id != item.from ? item.from : item.to} }"
