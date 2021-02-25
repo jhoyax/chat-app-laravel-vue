@@ -91,7 +91,9 @@ export default {
                     this.chats = res.data.chats;
                     this.toDetails = res.data.toDetails;
 
-                    window.scrollTo(0, document.body.scrollHeight);
+                    setTimeout(() => {
+                        window.scrollTo(0, document.body.scrollHeight);
+                    }, 500);
                 },
                 errorCb: error => {
                     this.$router.push({name: 'chats'});
