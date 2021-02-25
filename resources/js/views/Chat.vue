@@ -23,15 +23,14 @@
                     v-for="(item, index) in chats"
                     :key="index"
                     :class="{
-                        'chat__message-receiver': toDetails.id == item.from,
+                        'chat__message-receiver': fromId != item.from,
                         'chat__message-sender': fromId == item.from,
                     }">
-                    <div
-                        v-if="toDetails.id == item.from"
+                    <div v-if="fromId != item.from"
                         class="chat__message-img"
                         :style="getAvatarStyle(chats[index + 1] ? (chats[index + 1].to == item.to ? 'unset' : toDetails.avatar) : toDetails.avatar)"></div>
                     <div class="chat__message-text">
-                        <p>{{ item.message }}</p>
+                        <p :title="item.created_at">{{ item.message }}</p>
                     </div>
                 </li>
             </ul>
@@ -91,6 +90,8 @@ export default {
                 successCb: res => {
                     this.chats = res.data.chats;
                     this.toDetails = res.data.toDetails;
+
+                    window.scrollTo(0, document.body.scrollHeight);
                 },
                 errorCb: error => {
                     this.$router.push({name: 'chats'});

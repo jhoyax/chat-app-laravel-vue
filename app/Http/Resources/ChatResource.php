@@ -16,11 +16,14 @@ class ChatResource extends JsonResource
      */
     public function toArray($request)
     {
+        $from = User::find($this->from);
         $to = User::find($this->to);
 
         return [
             'id' => $this->id,
             'from' => $this->from,
+            'from_name' => $from ? $from->name : '',
+            'from_avatar' => $from ? $from->avatar : '',
             'to' => $this->to,
             'to_name' => $this->to_name,
             'to_avatar' => $to ? $to->avatar : '',

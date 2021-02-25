@@ -81,6 +81,7 @@ class Chat extends Model
                 $query->selectRaw('max(c.id)')
                     ->from('chats as c')
                     ->where('from', $from)
+                    ->orWhere('to', $from)
                     ->groupByRaw('c.from, c.to');
             });
         }

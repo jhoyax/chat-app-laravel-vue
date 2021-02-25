@@ -30,9 +30,12 @@
                 <template v-else>
                     <template v-if="chatList">
                         <li v-for="(item, index) in chatList" :key="index">
-                            <router-link :to="{ name: 'chat', params: {fromId: user.id, toId: item.to} }" class="chats__item">
-                                <div class="chats__item-img" :style="getAvatarStyle(item.to_avatar)"></div>
-                                <label>{{ item.to_name }}</label>
+                            <router-link
+                                :to="{ name: 'chat', params: {fromId: user.id, toId: user.id != item.from ? item.from : item.to} }"
+                                class="chats__item"
+                                :title="item.created_at">
+                                <div class="chats__item-img" :style="getAvatarStyle(user.id != item.from ? item.from_avatar : item.to_avatar)"></div>
+                                <label>{{ user.id != item.from ? item.from_name : item.to_name }}</label>
                             </router-link>
                         </li>
                     </template>
@@ -91,7 +94,17 @@ export default {
                 from: this.user.id,
                 name: this.keyword,
                 successCb: res => {
-                    this.chatList = res.data.data;
+                    let idList = [];
+                    this.chatList = res.data.data.filter((item, index) => {
+                        let getTo = this.user.id != item.from ? item.from : item.to;
+
+                        if (idList.includes(getTo)) {
+                            return false;
+                        }
+
+                        idList.push(getTo);
+                        return true;
+                    });
                 },
                 errorCb: error => {}
             };
