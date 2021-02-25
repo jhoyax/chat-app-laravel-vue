@@ -52,7 +52,13 @@
     label {
         font-weight: bold;
         margin-left: 15px;
+        cursor: pointer;
     }
+}
+
+.chats__label {
+    font-weight: bold;
+    padding: 10px 0;
 }
 
 .chats__item-img {

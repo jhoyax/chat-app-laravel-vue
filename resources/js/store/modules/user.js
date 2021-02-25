@@ -14,6 +14,13 @@ const getters = {
 };
 
 const actions = {
+    [ACTION.GET_USER_LIST]({commit}, {name, successCb, errorCb}) {
+      http.get('users?name=' + name, res => {
+        successCb(res);
+      }, error => {
+        errorCb(error);
+      });
+    },
     [ACTION.GET_USER_BY_ID]({commit}, {id, successCb, errorCb}) {
       http.get('users/get-by-id?id=' + id, res => {
         successCb(res);

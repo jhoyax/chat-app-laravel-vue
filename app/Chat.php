@@ -19,7 +19,7 @@ class Chat extends Model
      * Scope a query to filter by to_name
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param   mixed $name
+     * @param   mixed  $name
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -36,7 +36,7 @@ class Chat extends Model
      * Scope a query to filter by from
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param   mixed $from
+     * @param   mixed  $from
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -53,7 +53,7 @@ class Chat extends Model
      * Scope a query to filter by to
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param   mixed $to
+     * @param   mixed  $to
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -61,6 +61,50 @@ class Chat extends Model
     {
         if ($to) {
             return $query->where('to', $to);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Scope a query to group chat by from
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param   mixed  $from
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeGroupChatByFrom($query, $from)
+    {
+        if ($from) {
+            return $query->whereIn('id', function ($query) use ($from) {
+                $query->selectRaw('max(c.id)')
+                    ->from('chats as c')
+                    ->where('from', $from)
+                    ->groupByRaw('c.from, c.to');
+            });
+        }
+
+        return $query;
+    }
+
+    /**
+     * Scope a query to get all chat by from and to
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param   mixed  $from
+     * @param   mixed  $to
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeGetAllChatByFromAndTo($query, $from, $to)
+    {
+        if ($from && $to) {
+            return $query->where(function ($query) use ($from, $to) {
+                $query->filterByFrom($from)->filterByTo($to);
+            })->orWhere(function ($query) use ($from, $to) {
+                $query->filterByFrom($to)->filterByTo($from);
+            });
         }
 
         return $query;

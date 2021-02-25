@@ -30,7 +30,7 @@ let router = new VueRouter({
           meta: { requiredAuth: true }
         },
         {
-          path: '/chats/:chatId',
+          path: '/chats/:fromId/:toId',
           name: 'chat',
           component: Chat,
           meta: { requiredAuth: true }

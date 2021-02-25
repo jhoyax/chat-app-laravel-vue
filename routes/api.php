@@ -26,8 +26,10 @@ Route::namespace('API')->group(function () {
         });
 
         Route::prefix('chats')->group(function () {
-            Route::get('/', 'ChatController@index');
+            Route::get('chat-list', 'ChatController@chatList');
+            Route::get('chat-single', 'ChatController@chatSingle');
             Route::post('/', 'ChatController@store');
+            Route::delete('/', 'ChatController@destroy');
         });
     });
 

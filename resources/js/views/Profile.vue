@@ -94,20 +94,19 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
 
 import Form from '@/utils/form';
 import Menu from '@/components/Menu';
-import { GET_USER_BY_ID, UPDATE_USER, UPDATE_USER_AVATAR } from '@/store/action-types';
-import { SET_CURRENT_USER } from '@/store/mutation-types';
+import setCurrentUser from '@/mixins/setCurrentUser';
+import { UPDATE_USER, UPDATE_USER_AVATAR } from '@/store/action-types';
 
 export default {
     name: 'Profile',
+    mixins: [setCurrentUser],
     data() {
         return {
             isEdit: false,
-            user: {},
-            profileId: this.$route.params.profileId,
             form: new Form({
                 name: '',
                 email: '',
@@ -120,17 +119,7 @@ export default {
     components: {
         Menu,
     },
-    mounted() {
-        if (Object.keys(this.currentUser).length && ! this.profileId) {
-            this.user = this.currentUser;
-        } else {
-            this.getUserById();
-        }
-    },
     computed: {
-        ...mapGetters([
-            'currentUser'
-        ]),
         getAvatarStyle() {
             if (this.user.avatar) {
                 return `background-image: url(${this.user.avatar})`;
@@ -141,12 +130,8 @@ export default {
     },
     methods: {
         ...mapActions( [
-            GET_USER_BY_ID,
             UPDATE_USER,
             UPDATE_USER_AVATAR,
-        ]),
-        ...mapMutations( [
-            SET_CURRENT_USER,
         ]),
         updateProfile() {
             let params = {
@@ -173,22 +158,6 @@ export default {
                 }
             }
             this.UPDATE_USER(params);
-        },
-        getUserById() {
-            let params = {
-                id: this.profileId,
-                successCb: res => {
-                    this.user = res.data.data;
-
-                    if (this.user.isCurrentUser) {
-                        this.SET_CURRENT_USER({user: res.data.data});
-                    }
-                },
-                errorCb: error => {
-                    this.$router.push({name: 'chats'});
-                }
-            }
-            this.GET_USER_BY_ID(params);
         },
         editProfile() {
             this.form.name = this.user.name;

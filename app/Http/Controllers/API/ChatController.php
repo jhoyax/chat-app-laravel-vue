@@ -3,23 +3,44 @@
 namespace App\Http\Controllers\API;
 
 use App\Chat;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ChatResource;
 use App\Http\Requests\StoreChatRequest;
+use App\Http\Requests\DestroyChatRequest;
+use App\Http\Requests\GetChatListRequest;
+use App\Http\Requests\GetChatSingleRequest;
 
 class ChatController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\GetChatListRequest  $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function chatList(GetChatListRequest $request)
     {
-        $chats = Chat::filterByFrom($request->input('from'))->get();
+        $chats = Chat::groupChatByFrom($request->input('from'))
+                    ->filterByToName($request->input('name'))
+                    ->orderByDesc('id')
+                    ->get();
+
+        return ChatResource::collection($chats);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \App\Http\Requests\GetChatSingleRequest  $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function chatSingle(GetChatSingleRequest $request)
+    {
+        $chats = Chat::getAllChatByFromAndTo($request->input('from'), $request->input('to'))
+                    ->orderBy('id')
+                    ->get();
 
         return ChatResource::collection($chats);
     }
@@ -46,12 +67,13 @@ class ChatController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\DestroyChatRequest  $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(DestroyChatRequest $request)
     {
-        return Chat::filterByFrom($request->input('from'))->filterByTo($request->input('to'))->delete();
+        return Chat::getAllChatByFromAndTo($request->input('from'), $request->input('to'))
+                ->delete();
     }
 }
