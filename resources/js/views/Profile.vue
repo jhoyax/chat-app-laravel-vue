@@ -4,7 +4,7 @@
             <h1>{{ $t('profile') }}</h1>
         </div>
         <div class="profile__picture">
-            <div class="profile__picture-img" :style="getAvatarStyle">
+            <div class="profile__picture-img" :style="getAvatarStyle(user.avatar)">
                 <input
                     v-if="user.isCurrentUser"
                     type="file"
@@ -99,11 +99,12 @@ import { mapActions } from 'vuex';
 import Form from '@/utils/form';
 import Menu from '@/components/Menu';
 import setCurrentUser from '@/mixins/setCurrentUser';
+import backgroundImageUrl from '@/mixins/backgroundImageUrl';
 import { UPDATE_USER, UPDATE_USER_AVATAR } from '@/store/action-types';
 
 export default {
     name: 'Profile',
-    mixins: [setCurrentUser],
+    mixins: [setCurrentUser, backgroundImageUrl],
     data() {
         return {
             isEdit: false,
@@ -118,15 +119,6 @@ export default {
     },
     components: {
         Menu,
-    },
-    computed: {
-        getAvatarStyle() {
-            if (this.user.avatar) {
-                return `background-image: url(${this.user.avatar})`;
-            } else {
-                return '';
-            }
-        }
     },
     methods: {
         ...mapActions( [

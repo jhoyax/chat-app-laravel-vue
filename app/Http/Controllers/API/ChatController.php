@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Chat;
+use App\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ChatResource;
 use App\Http\Requests\StoreChatRequest;
-use App\Http\Requests\DestroyChatRequest;
 use App\Http\Requests\GetChatListRequest;
 use App\Http\Requests\GetChatSingleRequest;
+use App\Http\Requests\DestroyChatSingleRequest;
 
 class ChatController extends Controller
 {
@@ -42,7 +43,35 @@ class ChatController extends Controller
                     ->orderBy('id')
                     ->get();
 
-        return ChatResource::collection($chats);
+        $getToUserLastChat = Chat::where(function ($query) use ($request) {
+            $query->getAllChatByFromAndTo($request->input('from'), $request->input('to'));
+        })->where('to', $request->input('to'))
+        ->orderByDesc('id')
+        ->first();
+
+        $toDetails = [];
+        if ($getToUserLastChat) {
+            $getToUserLastChat = collect(new ChatResource($getToUserLastChat))->toArray();
+            $toDetails = [
+                'id' => $getToUserLastChat['to'],
+                'name' => $getToUserLastChat['to_name'],
+                'avatar' => $getToUserLastChat['to_avatar'],
+            ];
+        } else {
+            $user = User::find($request->input('to'));
+            if ($user) {
+                $toDetails = [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'avatar' => $user->avatar,
+                ];
+            }
+        }
+
+        return [
+            'chats' => ChatResource::collection($chats),
+            'toDetails' => $toDetails,
+        ];
     }
 
     /**
@@ -67,11 +96,11 @@ class ChatController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Http\Requests\DestroyChatRequest  $request
+     * @param  \App\Http\Requests\DestroyChatSingleRequest  $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyChatRequest $request)
+    public function destroyChatSingle(DestroyChatSingleRequest $request)
     {
         return Chat::getAllChatByFromAndTo($request->input('from'), $request->input('to'))
                 ->delete();

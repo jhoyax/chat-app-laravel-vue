@@ -103,6 +103,8 @@
     box-shadow: rgb(0 0 0 / 5%) 0 -16px 25px -7px;
     padding: 20px 10px;
     background-color: $color-white;
+    display: flex;
+    align-items: center;
 
     @include max-screen($phone-max-width) {
         width: 100vw;
@@ -114,6 +116,7 @@
         padding: 1em 2em;
         border-radius: 2em;
         margin-bottom: 0;
+        margin-right: 10px;
 
         font-family: $root-font-family;
         font-size: $root-font-size;
@@ -151,10 +154,10 @@
 }
 
 .chat__message-text {
-    max-width: 300px;
+    width: 300px;
 
     @include max-screen($phone-min-width) {
-        max-width: 200px;
+        width: 200px;
     }
 
     p {

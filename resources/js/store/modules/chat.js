@@ -15,6 +15,31 @@ const actions = {
         }, error => {
             errorCb(error);
         });
+    },
+    [ACTION.STORE_CHAT]({commit}, {to, to_name, message, successCb, errorCb}) {
+        let data = {
+            to: to,
+            to_name: to_name,
+            message: message,
+        };
+
+        http.post('chats', data, res => {
+            successCb(res);
+        }, error => {
+            errorCb(error);
+        });
+    },
+    [ACTION.DELETE_CHAT_SINGLE]({commit}, {from, to, successCb, errorCb}) {
+        let data = {
+            from: from,
+            to: to,
+        };
+
+        http.delete('chats/chat-single', data, res => {
+            successCb(res);
+        }, error => {
+            errorCb(error);
+        });
     }
 };
 

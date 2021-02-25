@@ -29,7 +29,7 @@ Route::namespace('API')->group(function () {
             Route::get('chat-list', 'ChatController@chatList');
             Route::get('chat-single', 'ChatController@chatSingle');
             Route::post('/', 'ChatController@store');
-            Route::delete('/', 'ChatController@destroy');
+            Route::delete('chat-single', 'ChatController@destroyChatSingle');
         });
     });
 

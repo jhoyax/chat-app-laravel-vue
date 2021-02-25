@@ -30,7 +30,7 @@
                 <template v-else>
                     <template v-if="chatList">
                         <li v-for="(item, index) in chatList" :key="index">
-                            <router-link :to="{ name: 'chat', params: {fromId: user.id, toId: item.id} }" class="chats__item">
+                            <router-link :to="{ name: 'chat', params: {fromId: user.id, toId: item.to} }" class="chats__item">
                                 <div class="chats__item-img" :style="getAvatarStyle(item.to_avatar)"></div>
                                 <label>{{ item.to_name }}</label>
                             </router-link>
@@ -54,11 +54,12 @@ import { mapActions } from 'vuex';
 import Menu from '@/components/Menu';
 const store = require( '@/store/' ).default;
 import setCurrentUser from '@/mixins/setCurrentUser';
+import backgroundImageUrl from '@/mixins/backgroundImageUrl';
 import { GET_CHAT_LIST, GET_USER_LIST } from '@/store/action-types';
 
 export default {
     name: 'Chats',
-    mixins: [setCurrentUser],
+    mixins: [setCurrentUser, backgroundImageUrl],
     data() {
         return {
             keyword: '',
@@ -85,13 +86,6 @@ export default {
             GET_CHAT_LIST,
             GET_USER_LIST,
         ]),
-        getAvatarStyle(avatar) {
-            if (avatar) {
-                return `background-image: url(${avatar})`;
-            } else {
-                return '';
-            }
-        },
         getChatList() {
             let params = {
                 from: this.user.id,

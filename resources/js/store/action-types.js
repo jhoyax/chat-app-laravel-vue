@@ -4,6 +4,8 @@ export const LOGOUT = 'LOGOUT';
 // chat.js
 export const GET_CHAT_LIST = 'GET_CHAT_LIST';
 export const GET_CHAT_SINGLE = 'GET_CHAT_SINGLE';
+export const STORE_CHAT = 'STORE_CHAT';
+export const DELETE_CHAT_SINGLE = 'DELETE_CHAT_SINGLE';
 
 // user.js
 export const GET_USER_LIST = 'GET_USER_LIST';
@@ -16,6 +18,8 @@ export const ACTION = {
 
     GET_CHAT_LIST,
     GET_CHAT_SINGLE,
+    STORE_CHAT,
+    DELETE_CHAT_SINGLE,
 
     GET_USER_LIST,
     GET_USER_BY_ID,
