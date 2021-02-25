@@ -41,7 +41,7 @@ class User extends Authenticatable
      * Scope a query to filter by name
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param mixed $name
+     * @param   mixed $name
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */

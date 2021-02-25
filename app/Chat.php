@@ -19,7 +19,7 @@ class Chat extends Model
      * Scope a query to filter by to_name
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param mixed $name
+     * @param   mixed $name
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -33,19 +33,34 @@ class Chat extends Model
     }
 
     /**
-     * Scope a query to filter by from and to
+     * Scope a query to filter by from
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param mixed $name
-     * @param mixed $from
-     * @param mixed $to
+     * @param   mixed $from
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFilterByFromAndTo($query, $from, $to)
+    public function scopeFilterByFrom($query, $from)
     {
-        if ($from && $to) {
-            return $query->where('from', $from)->where('to', $to);
+        if ($from) {
+            return $query->where('from', $from);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Scope a query to filter by to
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param   mixed $to
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFilterByTo($query, $to)
+    {
+        if ($to) {
+            return $query->where('to', $to);
         }
 
         return $query;

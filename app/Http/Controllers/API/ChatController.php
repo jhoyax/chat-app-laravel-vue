@@ -19,8 +19,7 @@ class ChatController extends Controller
      */
     public function index(Request $request)
     {
-        $chats = Chat::filterByFromAndTo($request->input('from'), $request->input('to'))
-                    ->get();
+        $chats = Chat::filterByFrom($request->input('from'))->get();
 
         return ChatResource::collection($chats);
     }
@@ -53,6 +52,6 @@ class ChatController extends Controller
      */
     public function destroy(Request $request)
     {
-        return Chat::filterByFromAndTo($request->input('from'), $request->input('to'))->delete();
+        return Chat::filterByFrom($request->input('from'))->filterByTo($request->input('to'))->delete();
     }
 }
