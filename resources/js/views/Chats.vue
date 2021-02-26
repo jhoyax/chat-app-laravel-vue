@@ -74,7 +74,7 @@ export default {
         Menu,
     },
     mounted() {
-        if (Object.keys(this.currentUser).length    ) {
+        if (Object.keys(this.currentUser).length) {
             this.getChatList();
         } else {
             store.subscribe((mutation, state) => {
@@ -94,21 +94,24 @@ export default {
                 from: this.user.id,
                 name: this.keyword,
                 successCb: res => {
-                    let idList = [];
-                    this.chatList = res.data.data.filter((item, index) => {
-                        let getTo = this.user.id != item.from ? item.from : item.to;
-
-                        if (idList.includes(getTo)) {
-                            return false;
-                        }
-
-                        idList.push(getTo);
-                        return true;
-                    });
+                    this.chatListFilter(res.data.data);
                 },
                 errorCb: error => {}
             };
             this.GET_CHAT_LIST(params);
+        },
+        chatListFilter(data) {
+            let idList = [];
+            this.chatList = data.filter((item, index) => {
+                let getTo = this.user.id != item.from ? item.from : item.to;
+
+                if (idList.includes(getTo)) {
+                    return false;
+                }
+
+                idList.push(getTo);
+                return true;
+            });
         },
         getUserList() {
             let params = {

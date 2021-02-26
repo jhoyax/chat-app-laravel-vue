@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import { GET_CHAT_SINGLE, STORE_CHAT, DELETE_CHAT_SINGLE } from '@/store/action-types';
 import backgroundImageUrl from '@/mixins/backgroundImageUrl';
@@ -62,7 +62,24 @@ export default {
         }
     },
     mounted() {
-        this.getChatSingle()
+        this.getChatSingle();
+        this.joinChatChannel();
+    },
+    computed: {
+        ...mapGetters([
+            'currentUser'
+        ]),
+        chatChannelName() {
+            let lowId = this.fromId;
+            let highId = this.toId;
+
+            if (lowId > highId) {
+                lowId = this.toId;
+                highId = this.fromId;
+            }
+
+            return `chat.${lowId}.${highId}`;
+        }
     },
     methods: {
         ...mapActions( [
@@ -88,6 +105,10 @@ export default {
                 from: this.fromId,
                 to: this.toId,
                 successCb: res => {
+                    if (this.fromId != res.data.currentUserId) {
+                        this.$router.push({name: 'chats'});
+                    }
+
                     this.chats = res.data.chats;
                     this.toDetails = res.data.toDetails;
 
@@ -113,6 +134,26 @@ export default {
                 errorCb: error => {}
             };
             this.STORE_CHAT(params);
+        },
+        joinChatChannel() {
+            window.Echo.join(this.chatChannelName)
+            .here(users => {
+                console.log('here', users)
+            })
+            .listen('.chatUpdates', (event) => {
+                console.log('.chatUpdates', event);
+
+                this.chats = event.chats;
+                this.toDetails = event.toDetails;
+
+                setTimeout(() => {
+                    window.scrollTo(0, document.body.scrollHeight);
+                }, 500);
+            })
+            .listen('.deleteChat', (event) => {
+                console.log('.deleteChat', event);
+                this.$router.push({name: 'chats'});
+            });
         },
     }
 }

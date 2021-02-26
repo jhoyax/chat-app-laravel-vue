@@ -26,3 +26,25 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+import echo from '@/utils/laravel-echo';
+
+window.io = require('socket.io-client');
+
+window.Echo = echo.new();
+
+window.Echo.connector.socket.on('connect', () => {
+    console.log('%c Websocket: connect ', 'background: #0c8e23; color: #fff');
+});
+
+window.Echo.connector.socket.on('sping', () => {
+    console.log('%c Websocket: sping ', 'background: #1533cc; color: #fff');
+});
+
+window.Echo.connector.socket.on('reconnecting', () => {
+    console.log('%c Websocket: reconnecting ', 'background: #1533cc; color: #fff');
+});
+
+window.Echo.connector.socket.on('disconnect', () => {
+    console.log('%c Websocket: disconnect ', 'background: #ff0000; color: #fff');
+});

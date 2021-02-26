@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Chat;
 use App\User;
+use App\Events\DeleteChatEvent;
+use App\Events\ChatUpdatesEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ChatResource;
 use App\Http\Requests\StoreChatRequest;
@@ -39,13 +41,25 @@ class ChatController extends Controller
      */
     public function chatSingle(GetChatSingleRequest $request)
     {
-        $chats = Chat::getAllChatByFromAndTo($request->input('from'), $request->input('to'))
+        $from = $request->input('from');
+        $to = $request->input('to');
+        $user = $request->user();
+
+        return array_merge(
+            ['currentUserId' => $user->id],
+            $this->getChatSingle($from, $to)
+        );
+    }
+
+    public function getChatSingle($from, $to)
+    {
+        $chats = Chat::getAllChatByFromAndTo($from, $to)
                     ->orderBy('id')
                     ->get();
 
-        $getToUserLastChat = Chat::where(function ($query) use ($request) {
-            $query->getAllChatByFromAndTo($request->input('from'), $request->input('to'));
-        })->where('to', $request->input('to'))
+        $getToUserLastChat = Chat::where(function ($query) use ($from, $to) {
+            $query->getAllChatByFromAndTo($from, $to);
+        })->where('to', $to)
         ->orderByDesc('id')
         ->first();
 
@@ -58,7 +72,7 @@ class ChatController extends Controller
                 'avatar' => $getToUserLastChat['to_avatar'],
             ];
         } else {
-            $user = User::find($request->input('to'));
+            $user = User::find($to);
             if ($user) {
                 $toDetails = [
                     'id' => $user->id,
@@ -83,12 +97,17 @@ class ChatController extends Controller
      */
     public function store(StoreChatRequest $request)
     {
+        $from = $request->user()->id;
+        $to = intval($request->input('to'));
+
         $chat = Chat::create([
-            'from' => $request->user()->id,
-            'to' => intval($request->input('to')),
+            'from' => $from,
+            'to' => $to,
             'to_name' => $request->input('to_name'),
             'message' => $request->input('message'),
         ]);
+
+        broadcast(new ChatUpdatesEvent($to, $from))->toOthers();
 
         return new ChatResource($chat);
     }
@@ -102,7 +121,13 @@ class ChatController extends Controller
      */
     public function destroyChatSingle(DestroyChatSingleRequest $request)
     {
-        return Chat::getAllChatByFromAndTo($request->input('from'), $request->input('to'))
-                ->delete();
+        $from = $request->input('from');
+        $to = $request->input('to');
+
+        $result = Chat::getAllChatByFromAndTo($from, $to)->delete();
+
+        broadcast(new DeleteChatEvent($to, $from))->toOthers();
+
+        return $result;
     }
 }

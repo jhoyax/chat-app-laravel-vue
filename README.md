@@ -1,7 +1,7 @@
 # Setup Laravel
 
-1. cp .env.example .env
-2. composer install
+1. > cp .env.example .env
+2. > composer install
 3. > ./scripts/fresh.sh
 4. copy Client ID:2 and Client Secret to .env file
 ```
@@ -11,11 +11,11 @@ PASSPORT_CLIENT_SECRET=DdH27rrhA9avk5XS5JdfdaMWyFm3UIMqBNwRjcTj
 
 # Setup Vue
 
-1. npm install
+> npm install
 
 # Compile Vue
 
-1. npm run dev
+> npm run dev
 
 
 # Laradock
@@ -25,6 +25,14 @@ PHP_VERSION=7.3
 MYSQL_VERSION=latest
 ```
 
-### Run Laradock
+#### Replace these files inside laradock
 
-> docker-compose up -d mysql nginx
+```
+> cp ./scripts/laradock/nginx/sites/app.conf ./laradock/nginx/sites/app.conf
+> cp ./scripts/laradock/laravel-echo-server/package.json ./laradock/laravel-echo-server/package.json
+> cp ./scripts/laradock/laravel-echo-server/laravel-echo-server.json ./laradock/laravel-echo-server/laravel-echo-server.json
+```
+
+#### Run
+
+> docker-compose up -d mysql nginx redis laravel-echo-server
